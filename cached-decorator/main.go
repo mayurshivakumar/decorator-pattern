@@ -1,14 +1,14 @@
 package main
 
 import (
-"fmt"
- "github.com/patrickmn/go-cache"
+	"fmt"
+	"github.com/patrickmn/go-cache"
 	"time"
 )
 
-type Getter struct {}
+type Getter struct{}
 
-func (g *Getter)GetNameByID(ID string) string{
+func (g *Getter) GetNameByID(ID string) string {
 	// dummy get
 	if ID == "123" {
 		return "Name 123"
@@ -16,7 +16,7 @@ func (g *Getter)GetNameByID(ID string) string{
 	return "Name 1234 ..."
 }
 
-func NewGetter() *Getter{
+func NewGetter() *Getter {
 	return &Getter{}
 }
 
@@ -37,18 +37,17 @@ func (c *CachedGetter) CachedGetNameByID(ID string) string {
 	}
 	fmt.Println("caching it....")
 	name = c.Get.GetNameByID(ID)
-	c.cache.Set(ID, name, 5 * time.Minute)
+	c.cache.Set(ID, name, 5*time.Minute)
 	return name.(string)
 }
 
 func NewCachedGetter(g Get) *CachedGetter {
 	c := cache.New(5*time.Minute, 10*time.Minute)
 	return &CachedGetter{
-		Get:g,
+		Get:   g,
 		cache: c,
 	}
 }
-
 
 func main() {
 	// without caching
